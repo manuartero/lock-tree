@@ -6,6 +6,7 @@ export type MediaResource =
   | "reset.css"
   | "vscode.css"
   | "styles.css"
+  | "d3.min.js"
   | "main.js";
 
 export function getMediaUris(
@@ -22,6 +23,7 @@ export function getMediaUris(
     "reset.css": uri("reset.css"),
     "vscode.css": uri("vscode.css"),
     "styles.css": uri("styles.css"),
+    "d3.min.js": uri("d3.min.js"),
     "main.js": uri("main.js"),
   };
 }

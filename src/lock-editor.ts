@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
 import { getHtmlContent } from "./html-content";
 
+// tmp
+import * as example from "./example.json";
+
 function getDocumentAsJSON(document: vscode.TextDocument) {
   const text = document.getText();
   if (text.trim().length === 0) {
@@ -36,7 +39,8 @@ export class LockEditor implements vscode.CustomTextEditorProvider {
     function updateWebview() {
       webviewPanel.webview.postMessage({
         type: "update",
-        text: document.getText(),
+        // data: document.getText(),
+        data: example,
       });
     }
 
