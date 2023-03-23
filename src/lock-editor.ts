@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getWebviewContent } from "./webview-content";
+import { getHtmlContent } from "./html-content";
 
 function getDocumentAsJSON(document: vscode.TextDocument) {
   const text = document.getText();
@@ -28,7 +28,7 @@ export class LockEditor implements vscode.CustomTextEditorProvider {
     webviewPanel.webview.options = {
       enableScripts: true,
     };
-    webviewPanel.webview.html = getWebviewContent(
+    webviewPanel.webview.html = getHtmlContent(
       this.context.extensionUri,
       webviewPanel.webview
     );
@@ -36,7 +36,7 @@ export class LockEditor implements vscode.CustomTextEditorProvider {
     function updateWebview() {
       webviewPanel.webview.postMessage({
         type: "update",
-        document: document,
+        text: document.getText(),
       });
     }
 
