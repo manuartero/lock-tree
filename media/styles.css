@@ -1,16 +1,22 @@
-svg circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+.lock-tree {
+  max-width: 100%;
+  height: auto;
 }
 
-svg text {
+.node {
   cursor: pointer;
-  font: 14px consolas, sans-serif;
 }
 
-svg path {
+.node-circle {
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+.node-link {
   fill: none;
-  stroke: #ccc;
-  stroke-width: 3px;
+  stroke: #555;
+}
+
+.node-label {
+  font: 14px courier;
 }

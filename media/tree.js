@@ -17,7 +17,7 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
   linkTarget = "_blank", // the target attribute for links (if any)
   width = 640, // outer width, in pixels
   height = undefined, // outer height, in pixels
-  r = 3, // radius of nodes
+  r = 5, // radius of nodes
   padding = 1, // horizontal padding for first and last column
   fill = "#999", // fill for nodes
   stroke = "#555", // stroke for links
@@ -45,10 +45,10 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
 
   // Compute labels and titles.
   const descendants = root.descendants();
-  const L = label === null ? null : descendants.map(d => label(d.data, d));
+  const LABELS = label === null ? null : descendants.map(d => label(d.data, d));
 
   // Compute the layout.
-  const dx = 10;
+  const dx = 25; // line height
   const dy = width / (root.height + padding);
   tree().nodeSize([dx, dy])(root);
 
@@ -78,11 +78,11 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
     .attr("viewBox", [-dy * padding / 2, x0 - dx, width, height])
     .attr("width", width)
     .attr("height", height)
-    .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
-    .attr("font-family", "sans-serif")
-    .attr("font-size", 10);
+    .attr("class", "lock-tree");
 
+  // connections
   svg.append("g")
+    .attr('class', 'node-link')
     .attr("fill", "none")
     .attr("stroke", stroke)
     .attr("stroke-opacity", strokeOpacity)
@@ -96,15 +96,18 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
       .x(d => d.y)
       .y(d => d.x));
 
+  // nodes
   const node = svg.append("g")
     .selectAll("a")
     .data(root.descendants())
     .join("a")
+    .attr('class', 'node')
     .attr("xlink:href", link === null ? null : d => link(d.data, d))
     .attr("target", link === null ? null : linkTarget)
     .attr("transform", d => `translate(${d.y},${d.x})`);
 
   node.append("circle")
+    .attr('class', 'node-circle')
     .attr("fill", d => d.children ? stroke : fill)
     .attr("r", r);
 
@@ -113,15 +116,17 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
       .text(d => title(d.data, d));
   }
 
-  if (L) {
+  const marginCircleToText = 8;
+  if (LABELS) {
     node.append("text")
+      .attr("class", "node-label")
       .attr("dy", "0.32em")
-      .attr("x", d => d.children ? -6 : 6)
+      .attr("x", d => d.children ? -marginCircleToText : marginCircleToText)
       .attr("text-anchor", d => d.children ? "end" : "start")
       .attr("paint-order", "stroke")
       .attr("stroke", halo)
       .attr("stroke-width", haloWidth)
-      .text((d, i) => L[i]);
+      .text((d, i) => LABELS[i]);
   }
 
   return svg.node();

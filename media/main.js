@@ -16,7 +16,6 @@ function render(lockTree) {
   }
 
   const svg = Tree(lockTree, {
-    width: 500,
     label: d => d.name,
     title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
   });
