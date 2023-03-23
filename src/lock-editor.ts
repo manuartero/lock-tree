@@ -17,53 +17,56 @@ function getDocumentAsJson(document: vscode.TextDocument) {
   }
 }
 
-export class LockEditor implements vscode.CustomTextEditorProvider {
-  constructor(private readonly context: vscode.ExtensionContext) {}
-
-  /** onOpen */
-  resolveCustomTextEditor(
-    document: vscode.TextDocument,
-    webviewPanel: vscode.WebviewPanel,
-    _token: vscode.CancellationToken
-  ) {
-    webviewPanel.webview.options = {
-      enableScripts: true,
-    };
-    webviewPanel.webview.html = getHtmlContent(
-      this.context.extensionUri,
-      webviewPanel.webview
-    );
-
-    function updateWebview() {
-      const json = getDocumentAsJson(document);
-      const data = {
-        type: "update",
-        lockTree: asTree(json, { filterDevDependencies: true }),
+export function LockEditor(
+  context: vscode.ExtensionContext
+): vscode.CustomTextEditorProvider {
+  return {
+    /**
+     * onOpen
+     */
+    resolveCustomTextEditor(
+      document: vscode.TextDocument,
+      webviewPanel: vscode.WebviewPanel,
+      _token: vscode.CancellationToken
+    ) {
+      webviewPanel.webview.options = {
+        enableScripts: true,
       };
-      webviewPanel.webview.postMessage(data);
-    }
+      webviewPanel.webview.html = getHtmlContent(
+        context.extensionUri,
+        webviewPanel.webview
+      );
 
-    const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(
-      (e) => {
-        if (e.document.uri.toString() === document.uri.toString()) {
-          updateWebview();
+      function updateWebview() {
+        const json = getDocumentAsJson(document);
+        const data = {
+          type: "update",
+          lockTree: asTree(json, { filterDevDependencies: true }),
+        };
+        webviewPanel.webview.postMessage(data);
+      }
+
+      const changeDocumentSubscription =
+        vscode.workspace.onDidChangeTextDocument((e) => {
+          if (e.document.uri.toString() === document.uri.toString()) {
+            updateWebview();
+          }
+        });
+
+      webviewPanel.onDidDispose(() => {
+        changeDocumentSubscription.dispose();
+      });
+
+      webviewPanel.webview.onDidReceiveMessage((e) => {
+        switch (e.type) {
+          case "add":
+            console.log("add");
+            // TODO
+            return;
         }
-      }
-    );
+      });
 
-    webviewPanel.onDidDispose(() => {
-      changeDocumentSubscription.dispose();
-    });
-
-    webviewPanel.webview.onDidReceiveMessage((e) => {
-      switch (e.type) {
-        case "add":
-          console.log("add");
-          // TODO
-          return;
-      }
-    });
-
-    updateWebview();
-  }
+      updateWebview();
+    },
+  };
 }

@@ -1,22 +1,18 @@
 import * as vscode from "vscode";
 import { LockEditor } from "./lock-editor";
 
-/* defined at package.json */
-const lockViewType = "lock-tree.lock";
-const openLockCommand = "lock-tree.lock.open";
-
 /**
  * Entry point: called the very first time the command is executed
  */
 export function activate(context: vscode.ExtensionContext) {
   console.debug("lockTree: activate");
 
-  const lockEditor = new LockEditor(context);
-  const editorProvider = vscode.window.registerCustomEditorProvider(
-    lockViewType,
-    lockEditor
+  const editorProvider = LockEditor(context);
+  const disposable = vscode.window.registerCustomEditorProvider(
+    "lock-tree.editor.view",
+    editorProvider
   );
-  context.subscriptions.push(editorProvider);
+  context.subscriptions.push(disposable);
 }
 
 export function deactivate() {}

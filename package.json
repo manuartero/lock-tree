@@ -19,7 +19,7 @@
   "contributes": {
     "customEditors": [
       {
-        "viewType": "lock-tree.lock",
+        "viewType": "lock-tree.editor.view",
         "displayName": "Lock Tree",
         "selector": [
           {
@@ -30,7 +30,7 @@
     ],
     "commands": [
       {
-        "command": "lock-tree.lock.open",
+        "command": "lock-tree.command.open-lock",
         "title": "Open Lock File"
       }
     ]
