@@ -10,7 +10,7 @@ export type PackageLockDependency = {
   version: string;
   resolved: string; // npm url
   integrity: string; // SHA
-  dev: boolean;
+  dev?: true;
   requires: Record<string, string>;
   dependencies: Record<string, PackageLockDependency>;
 };

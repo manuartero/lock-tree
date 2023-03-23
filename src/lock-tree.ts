@@ -6,20 +6,37 @@ type Tree = {
   children: Tree[];
 };
 
-export function asTree(lock: PackageLock): Tree {
+type Opts = {
+  filterDevDependencies?: boolean;
+};
+
+export function asTree(
+  lock: PackageLock,
+  opts: Opts = { filterDevDependencies: true }
+): Tree {
   if (lock.lockfileVersion < 2) {
     throw new Error("lockfileVersion < 2 not supported");
   }
   console.debug("asTree(): ", lock);
-  return { name: lock.name, children: asTreeChildren(lock.dependencies) };
+
+  return { name: lock.name, children: asTreeChildren(lock.dependencies, opts) };
 }
 
-function asTreeChildren(deps: Record<string, PackageLockDependency>): Tree[] {
+function asTreeChildren(
+  deps: Record<string, PackageLockDependency>,
+  opts: Opts
+): Tree[] {
   if (!deps) {
     return [];
   }
-  return Object.entries(deps).map(([name, dependency]) => {
-    const children = asTreeChildren(dependency.dependencies);
+
+  let entries = Object.entries(deps);
+  if (opts.filterDevDependencies) {
+    entries = entries.filter(([_, dependency]) => dependency.dev === undefined);
+  }
+
+  return entries.map(([name, dependency]) => {
+    const children = asTreeChildren(dependency.dependencies, opts);
     return { name, size: children.length, children };
   });
 }

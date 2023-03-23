@@ -12,7 +12,6 @@ const example = {
       version: "1.0.0",
       resolved: "https://registry.npmjs.org/a/-/a-1.0.0.tgz",
       integrity: "sha512-1",
-      dev: true,
       requires: {
         b: "^1.0.0",
       },
@@ -21,7 +20,7 @@ const example = {
           version: "1.0.0",
           resolved: "https://registry.npmjs.org/b/-/b-1.0.0.tgz",
           integrity: "sha512-2",
-          dev: true,
+          dev: true as const,
           requires: {},
           dependencies: {},
         },
@@ -33,6 +32,20 @@ const example = {
 suite("LockTree", () => {
   test("asTree()", () => {
     const lockTree = asTree(example);
+    assert.deepStrictEqual(lockTree, {
+      name: "example",
+      children: [
+        {
+          name: "a",
+          size: 0,
+          children: [],
+        },
+      ],
+    });
+  });
+
+  test("asTree() with dev dependencies", () => {
+    const lockTree = asTree(example, { filterDevDependencies: false });
     assert.deepStrictEqual(lockTree, {
       name: "example",
       children: [
