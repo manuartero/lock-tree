@@ -17,8 +17,6 @@ export function asTree(
   if (lock.lockfileVersion < 2) {
     throw new Error("lockfileVersion < 2 not supported");
   }
-  console.debug("asTree(): ", lock);
-
   return { name: lock.name, children: asTreeChildren(lock.dependencies, opts) };
 }
 

@@ -38,7 +38,7 @@ export class LockEditor implements vscode.CustomTextEditorProvider {
       const json = getDocumentAsJson(document);
       const data = {
         type: "update",
-        lockTree: asTree(json),
+        lockTree: asTree(json, { filterDevDependencies: true }),
       };
       webviewPanel.webview.postMessage(data);
     }
