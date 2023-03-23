@@ -34,18 +34,18 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
   // to convert tabular data to a hierarchy; otherwise we assume that the data is
   // specified as an object {children} with nested objects (a.k.a. the “flare.json”
   // format), and use d3.hierarchy.
-  const root = path != null ? d3.stratify().path(path)(data)
-    : id != null || parentId != null ? d3.stratify().id(id).parentId(parentId)(data)
+  const root = path !== null ? d3.stratify().path(path)(data)
+    : id !== null || parentId !== null ? d3.stratify().id(id).parentId(parentId)(data)
       : d3.hierarchy(data, children);
 
   // Sort the nodes.
-  if (sort != null) {
+  if (sort !== null) {
     root.sort(sort);
   }
 
   // Compute labels and titles.
   const descendants = root.descendants();
-  const L = label == null ? null : descendants.map(d => label(d.data, d));
+  const L = label === null ? null : descendants.map(d => label(d.data, d));
 
   // Compute the layout.
   const dx = 10;
@@ -56,15 +56,23 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
   let x0 = Infinity;
   let x1 = -x0;
   root.each(d => {
-    if (d.x > x1) x1 = d.x;
-    if (d.x < x0) x0 = d.x;
+    if (d.x > x1) {
+      x1 = d.x;
+    }
+    if (d.x < x0) {
+      x0 = d.x;
+    }
   });
 
   // Compute the default height.
-  if (height === undefined) height = x1 - x0 + dx * 2;
+  if (height === undefined) {
+    height = x1 - x0 + dx * 2;
+  }
 
   // Use the required curve
-  if (typeof curve !== "function") throw new Error(`Unsupported curve`);
+  if (typeof curve !== "function") {
+    throw new Error(`tree.js: Unsupported curve`);
+  }
 
   const svg = d3.create("svg")
     .attr("viewBox", [-dy * padding / 2, x0 - dx, width, height])
@@ -92,25 +100,29 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
     .selectAll("a")
     .data(root.descendants())
     .join("a")
-    .attr("xlink:href", link == null ? null : d => link(d.data, d))
-    .attr("target", link == null ? null : linkTarget)
+    .attr("xlink:href", link === null ? null : d => link(d.data, d))
+    .attr("target", link === null ? null : linkTarget)
     .attr("transform", d => `translate(${d.y},${d.x})`);
 
   node.append("circle")
     .attr("fill", d => d.children ? stroke : fill)
     .attr("r", r);
 
-  if (title != null) node.append("title")
-    .text(d => title(d.data, d));
+  if (title !== null) {
+    node.append("title")
+      .text(d => title(d.data, d));
+  }
 
-  if (L) node.append("text")
-    .attr("dy", "0.32em")
-    .attr("x", d => d.children ? -6 : 6)
-    .attr("text-anchor", d => d.children ? "end" : "start")
-    .attr("paint-order", "stroke")
-    .attr("stroke", halo)
-    .attr("stroke-width", haloWidth)
-    .text((d, i) => L[i]);
+  if (L) {
+    node.append("text")
+      .attr("dy", "0.32em")
+      .attr("x", d => d.children ? -6 : 6)
+      .attr("text-anchor", d => d.children ? "end" : "start")
+      .attr("paint-order", "stroke")
+      .attr("stroke", halo)
+      .attr("stroke-width", haloWidth)
+      .text((d, i) => L[i]);
+  }
 
   return svg.node();
 }
