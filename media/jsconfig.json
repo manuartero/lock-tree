@@ -5,9 +5,10 @@
     "jsx": "preserve",
     "checkJs": true,
     "strict": true,
+    "noImplicitAny": false,
     "strictFunctionTypes": true,
     "lib": [
-      "dom"
+      "dom",
     ]
   },
   "exclude": [
@@ -16,7 +17,7 @@
   ],
   "typeAcquisition": {
     "include": [
-      "@types/vscode-webview"
+      "@types/vscode-webview",
     ]
   }
 }

@@ -27,8 +27,9 @@ export function getHtmlContent(
   <body>
     <h1 id="heading">Hello</h1>
     <div id="chart"></div>
-    <script nonce="${nonce}" src="${media["d3.min.js"]}"></script>
-    <script nonce="${nonce}" src="${media["main.js"]}"></script>
+    <script src="${media["d3.min.js"]}" nonce="${nonce}"></script>
+    <script src="${media["main.js"]}" type="module" nonce="${nonce}"></script>
+    <script src="${media["tree.js"]}" type="module" nonce="${nonce}"></script>
   </body>
   </html>`;
 }
