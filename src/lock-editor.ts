@@ -1,10 +1,8 @@
 import * as vscode from "vscode";
 import { getHtmlContent } from "./html-content";
+import { asTree } from "./lock-tree";
 
-// tmp
-import * as example from "./example.json";
-
-function getDocumentAsJSON(document: vscode.TextDocument) {
+function getDocumentAsJson(document: vscode.TextDocument) {
   const text = document.getText();
   if (text.trim().length === 0) {
     return {};
@@ -37,11 +35,12 @@ export class LockEditor implements vscode.CustomTextEditorProvider {
     );
 
     function updateWebview() {
-      webviewPanel.webview.postMessage({
+      const json = getDocumentAsJson(document);
+      const data = {
         type: "update",
-        // data: document.getText(),
-        data: example,
-      });
+        lockTree: asTree(json),
+      };
+      webviewPanel.webview.postMessage(data);
     }
 
     const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(

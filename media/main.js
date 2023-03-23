@@ -10,26 +10,30 @@
 
   console.log('Initial state:', oldState);
 
-  // Handle messages sent from the extension to the webview
   window.addEventListener('message', event => {
-    render(event.data.data);
+    const { type, lockTree } = event.data;
+    console.debug('Message received from extension of type: ', type);
+    render(lockTree);
   });
 
 
   // d3
   // https://gist.github.com/mbostock/4339083
-  function render(data) {
-    console.log(JSON.stringify(data));
-    console.log({ d3 });
-    console.log(d3.select("body"));
+  function render(lockTree) {
+    if (!lockTree) {
+      throw new Error('No lock tree');
+    }
+    if (!d3) {
+      throw new Error('No d3');
+    }
 
-    const svg = Tree(data, {
+    const svg = Tree(lockTree, {
       width: 500,
       label: d => d.name,
       title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
     });
 
-    console.log({ chart: svg });
+    console.debug({ chart: svg });
 
     document.getElementById("chart").appendChild(svg);
 
