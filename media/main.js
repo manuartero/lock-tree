@@ -16,8 +16,9 @@ function render(lockTree) {
   }
 
   const svg = Tree(lockTree, {
-    label: d => d.name,
-    title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
+    label: d => d.deduped ? '✓' : d.name,
+    title: (d, n) => `${d.name}@${d.version}`, // hover text
+    link: d => d.resolved || "",
   });
 
   console.debug({ chart: svg });

@@ -13,7 +13,7 @@ export function Tree(data, { // data is either tabular (array of objects) or hie
   sort = null, // how to sort nodes prior to layout (e.g., (a, b) => d3.descending(a.height, b.height))
   label, // given a node d, returns the display name
   title, // given a node d, returns its hover text
-  link = null, // given a node d, its link (if any)
+  link, // given a node d, its link (if any)
   linkTarget = "_blank", // the target attribute for links (if any)
   width = 640, // outer width, in pixels
   height = undefined, // outer height, in pixels

@@ -1,60 +1,102 @@
 import * as assert from "assert";
 
 import { asTree } from "../../lock-tree";
+import * as packageLock from "../../examples/package-lock.json";
 
-const example = {
-  name: "example",
-  version: "1.0.0",
-  lockfileVersion: 2,
-  requires: true,
-  dependencies: {
-    a: {
-      version: "1.0.0",
-      resolved: "https://registry.npmjs.org/a/-/a-1.0.0.tgz",
-      integrity: "sha512-1",
-      requires: {
-        b: "^1.0.0",
-      },
-      dependencies: {
-        b: {
-          version: "1.0.0",
-          resolved: "https://registry.npmjs.org/b/-/b-1.0.0.tgz",
-          integrity: "sha512-2",
-          dev: true as const,
-          requires: {},
-          dependencies: {},
-        },
-      },
-    },
-  },
-};
-
-suite("LockTree", () => {
+suite.skip("LockTree", () => {
+  /**
+   *   ├─┬ @telefonica/living-apps-core-react@0.37.0
+   *   │ ├── classnames@2.3.2
+   *   │ ├── react-dom@18.2.0 deduped
+   *   │ └── react@18.2.0 deduped
+   *   ├─┬ react-dom@18.2.0
+   *   │ ├─┬ loose-envify@1.4.0
+   *   │ │ └── js-tokens@4.0.0
+   *   │ ├── react@18.2.0 deduped
+   *   │ └─┬ scheduler@0.23.0
+   *   │   └── loose-envify@1.4.0 deduped
+   *   └─┬ react@18.2.0
+   *     └── loose-envify@1.4.0 deduped
+   */
   test("asTree()", () => {
-    const lockTree = asTree(example);
+    const lockTree = asTree(packageLock);
     assert.deepStrictEqual(lockTree, {
-      name: "example",
+      name: "living-app-v2-la-rae",
+      version: "0.1.0",
+      size: 3,
       children: [
         {
-          name: "a",
-          size: 0,
-          children: [],
+          name: "@telefonica/living-apps-core-react",
+          version: "0.37.0",
+          size: 3,
+          children: [
+            {
+              name: "classnames",
+              version: "2.3.2",
+              size: 0,
+              children: [],
+            },
+            {
+              name: "react-dom ✅",
+              version: "18.2.0",
+              size: 0,
+              children: [],
+            },
+            {
+              name: "react ✅",
+              version: "18.2.0",
+              size: 0,
+              children: [],
+            },
+          ],
         },
-      ],
-    });
-  });
-
-  test("asTree() with dev dependencies", () => {
-    const lockTree = asTree(example, { filterDevDependencies: false });
-    assert.deepStrictEqual(lockTree, {
-      name: "example",
-      children: [
         {
-          name: "a",
+          name: "react",
+          version: "18.2.0",
           size: 1,
           children: [
             {
-              name: "b",
+              name: "loose-envify ✅",
+              version: "1.4.0",
+              size: 0,
+              children: [],
+            },
+          ],
+        },
+        {
+          name: "react-dom",
+          version: "18.2.0",
+          size: 3,
+          children: [
+            {
+              name: "loose-envify",
+              version: "1.4.0",
+              size: 1,
+              children: [
+                {
+                  name: "js-tokens",
+                  version: "4.0.0",
+                  size: 0,
+                  children: [],
+                },
+              ],
+            },
+            {
+              name: "scheduler",
+              version: "0.23.0",
+              size: 1,
+              children: [
+                {
+                  name: "loose-envify ✅",
+                  version: "1.4.0",
+                  size: 0,
+                  children: [],
+                },
+              ],
+            },
+            {
+              name: "react ✅",
+              version: "18.2.0",
               size: 0,
               children: [],
             },

@@ -26,7 +26,7 @@ export function getHtmlContent(
     <link href="${media["styles.css"]}" rel="stylesheet">
   </head>
   <body>
-    <h1 id="heading">Hello</h1>
+    <h1 id="heading">Prod Dependency Tree (BETA)</h1>
     <div id="chart"></div>
     <script src="${media["d3.min.js"]}" nonce="${nonce}"></script>
     <script src="${media["main.js"]}" type="module" nonce="${nonce}"></script>
