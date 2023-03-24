@@ -2,12 +2,16 @@
 
 > **Visualize the `package.-lock.json` Dependency Tree**
 
-## Features
+<p align="center">
+<img src="./icon.png" />
+</p>
 
-![v0_0_1 screenshot](./screenshots/v0_0_1.png)
+## Features
 
 `package-lock.json` has a ton of information. But it's not designed to be read by humans.</br>
 This extension allows you to visualize the dependency tree defined at `package-lock.json` making it easier to understand.
+
+![v0_0_1 screenshot](./screenshots/v0_0_1.png)
 
 ## TODO [[BETA]]
 

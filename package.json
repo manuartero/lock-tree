@@ -3,6 +3,8 @@
   "displayName": "Lock Tree",
   "description": "Visualize the Lock Dependency Tree",
   "version": "0.0.1",
+  "icon": "icon.png",
+  "main": "./out/extension.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/manuartero/lock-tree"
@@ -12,10 +14,18 @@
   },
   "license": "LICENSE",
   "categories": [
-    "Other"
+    "Visualization"
   ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
+  "author": {
+    "name": "Manuel Artero",
+    "email": "manutero.developer@gmail.com"
+  },
+  "capabilities": {
+    "customEditors": true
+  },
+  "activationEvents": [
+    "onView:viewId.lock-tree.editor.view"
+  ],
   "contributes": {
     "customEditors": [
       {
