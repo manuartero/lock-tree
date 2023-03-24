@@ -1,5 +1,6 @@
 {
   "name": "lock-tree",
+  "publisher": "manuelartero",
   "displayName": "Lock Tree",
   "description": "Visualize the Lock Dependency Tree",
   "version": "0.0.1",
